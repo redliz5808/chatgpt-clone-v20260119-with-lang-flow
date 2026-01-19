@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useRef, useEffect } from "react";
+import React, { useRef, useEffect, useState } from "react";
 import { useChat } from "@ai-sdk/react";
 import { ChatMessage } from "./chat-message";
 import { ChatInput } from "./chat-input";
@@ -26,18 +26,14 @@ function SparklesIcon({ className }: { className?: string }) {
 export function Chat() {
   const messagesEndRef = useRef<HTMLDivElement>(null);
 
-  const { messages, input, setInput, handleInputChange, handleSubmit, status, stop } = useChat({
+  const [input, setInput] = useState("");
+
+  const { messages, handleSubmit, status, stop } = useChat({
     api: "/api/chat",
   });
-
-  // Wrapper to allow setting input directly with a string
-  const updateInput = (value: string) => {
-    // Create a synthetic event for handleInputChange
-    const syntheticEvent = {
-      target: { value },
-    } as React.ChangeEvent<HTMLTextAreaElement>;
-    handleInputChange(syntheticEvent);
-  };
+  // const { messages, input, setInput, handleSubmit, status, stop } = useChat({
+  //   api: "/api/chat",
+  // });
 
   const isLoading = status === "streaming" || status === "submitted";
 
@@ -61,7 +57,7 @@ export function Chat() {
       <div className="flex-1 overflow-y-auto">
         <div className="max-w-3xl mx-auto px-4 py-8">
           {messages.length === 0 ? (
-            <EmptyState onSuggestionClick={(text) => updateInput(text)} />
+            <EmptyState onSuggestionClick={(text) => setInput(text)} />
           ) : (
             <div className="flex flex-col gap-6">
               {messages.map((message) => (
@@ -93,7 +89,7 @@ export function Chat() {
         <div className="max-w-3xl mx-auto px-4 py-4">
           <ChatInput
             input={input}
-            setInput={updateInput}
+            setInput={setInput}
             onSubmit={onFormSubmit}
             isLoading={isLoading}
             onStop={stop}
