@@ -49,7 +49,7 @@ export function ChatInput({
           value={input}
           onChange={(e) => setInput(e.target.value)}
           onKeyDown={handleKeyDown}
-          placeholder="Message ChatGPT"
+          placeholder="Message Gemini"
           className="min-h-[52px] max-h-[200px] resize-none border-0 bg-transparent pr-14 py-4 px-4 focus-visible:ring-0 focus-visible:ring-offset-0 text-foreground placeholder:text-muted-foreground"
           rows={1}
         />

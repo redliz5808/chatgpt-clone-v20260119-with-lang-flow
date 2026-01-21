@@ -28,7 +28,7 @@ export function Chat() {
 
   const [input, setInput] = useState("");
 
-  const { messages, handleSubmit, status, stop } = useChat({
+  const { messages, sendMessage, status, stop } = useChat({
     api: "/api/chat",
   });
   // const { messages, input, setInput, handleSubmit, status, stop } = useChat({
@@ -45,10 +45,12 @@ export function Chat() {
     scrollToBottom();
   }, [messages]);
 
-  const onFormSubmit = (e: React.FormEvent) => {
+  const onFormSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!input.trim() || isLoading) return;
-    handleSubmit(e);
+    await sendMessage({ text: input });
+    setInput("");
+    // handleSubmit(e);
   };
 
   return (
@@ -64,7 +66,8 @@ export function Chat() {
                 <ChatMessage key={message.id} message={message} />
               ))}
               {isLoading &&
-                messages[messages.length - 1]?.role === "user" && (
+                // messages[messages.length - 1]?.role === "user" && (
+                messages[messages.length - 1] && (
                   <div className="flex gap-4">
                     <div className="flex-shrink-0 w-8 h-8 rounded-full bg-primary flex items-center justify-center">
                       <SparklesIcon className="w-4 h-4 text-primary-foreground" />
@@ -95,7 +98,7 @@ export function Chat() {
             onStop={stop}
           />
           <p className="text-center text-xs text-muted-foreground mt-3">
-            ChatGPT can make mistakes. Check important info.
+            Gemini can make mistakes. Check important info.
           </p>
         </div>
       </div>

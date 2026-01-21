@@ -34,7 +34,7 @@ export function ChatMessage({ message }: ChatMessageProps) {
       </div>
       <div className="flex-1 pt-1 overflow-hidden">
         <div className="font-semibold text-sm mb-1 text-foreground">
-          {isUser ? "You" : "ChatGPT"}
+          {isUser ? "You" : "Gemini"}
         </div>
         <div className="prose prose-invert prose-sm max-w-none text-foreground">
           {isUser ? (

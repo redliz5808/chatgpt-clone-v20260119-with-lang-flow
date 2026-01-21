@@ -1,4 +1,4 @@
-import { convertToModelMessages, streamText, UIMessage } from "ai";
+import { UIMessage } from "ai";
 
 export const maxDuration = 30;
 
@@ -41,12 +41,9 @@ export async function POST(req: Request) {
 
   // Extract text content from the message
   const inputValue =
-    // typeof lastUserMessage.content === "string"
-    typeof lastUserMessage.parts === "string"
-      // ? lastUserMessage.content
-      ? lastUserMessage.parts
-      // : (lastUserMessage.content ?? [])
-      : (lastUserMessage.parts ?? [])
+    typeof lastUserMessage.content === "string"
+      ? lastUserMessage.content
+      : lastUserMessage.content
           .filter((part) => part.type === "text")
           .map((part) => (part as { type: "text"; text: string }).text)
           .join(" ");
@@ -90,8 +87,6 @@ export async function POST(req: Request) {
       data.outputs?.[0]?.outputs?.[0]?.artifacts?.message ||
       "No response received";
 
-      console.log(JSON.stringify(messageText))
-
     // Create a streaming response compatible with the AI SDK
     const encoder = new TextEncoder();
     const stream = new ReadableStream({
@@ -122,7 +117,6 @@ export async function POST(req: Request) {
         "Content-Type": "text/plain; charset=utf-8",
         "X-Vercel-AI-Data-Stream": "v1",
       },
-
     });
   } catch (error) {
     console.error("Error calling Langflow:", error);
